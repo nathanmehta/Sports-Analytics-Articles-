@@ -1,0 +1,69 @@
+---
+title: "Harden Article"
+author: "Nathan Mehta"
+date: "10/7/2021"
+output: html_document
+---
+- Analyzing effect of new foul rules on James Harden
+## Load data
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+```{r}
+PR<-read.csv("Downloads/P&R data.csv")
+```
+## packages
+```{r}
+head(PR)
+```
+```{r}
+library(tidyverse)
+library(ggplot2)
+library(dplyr)
+```
+## filter for qualified players
+```{r}
+PR
+```
+```{r}
+PR_mod<-PR%>%arrange(desc(PPP))%>%filter(POSS>7.0&TEAM!='BKN')
+PR_mod
+```
+## remove percent sign and plot Free Throw Frequency and Points Per PicknRoll
+```{r}
+PR_mod$FT.FREQ<-as.numeric(gsub("\\%","",PR_mod$FT.FREQ))
+graph1<-PR_mod%>%ggplot(aes(x=PPP,y=FT.FREQ))+geom_point(aes(color=PLAYER))+geom_text(size=2,aes(label=PLAYER)) + xlab("Points Per Pick and Roll") +ylab("Free Throw line Frequency.") +xlim(0,1.25)
+graph1
+```
+## Plot Free throws per PNR
+```{r}
+PR_FT_per<-PR_mod%>%mutate(FT_per_PPP=FT.FREQ/PPP)%>%filter(POSS>8)
+PR_FT_per%>%ggplot(aes(x=PLAYER,y=FT_per_PPP))+geom_bar(stat="identity") +theme(axis.text.x = element_text(angle = 90))
+```
+## Load Iso data
+```{r}
+Iso_data<-read.csv("Downloads/Isolation_data - Sheet1.csv")
+```
+
+```{r}
+head(Iso_data)
+```
+## clean data
+```{r}
+Iso<-Iso_data%>%filter(POSS>4.0)%>%arrange(desc(PPP))%>%filter(TEAM!='HOU')
+Iso
+```
+## plot possessions of iso data
+```{r}
+Iso%>%ggplot(aes(x=PLAYER,y=POSS))+geom_bar(stat="identity") +theme(axis.text.x = element_text(angle = 90))+ylab("Possessions in Isolation Per Game")
+```
+## plot free throw freq vs points per Iso
+```{r}
+Iso$FT.FREQ<-as.numeric(gsub("\\%","",Iso$FT.FREQ))
+Iso%>%ggplot(aes(x=PPP,y=FT.FREQ))+geom_point(aes(color=PLAYER))+geom_text(size=2,aes(label=PLAYER)) + xlab("Points Per Isolation") +ylab("Free Throw line Frequency") +xlim(0,1.25)
+```
+```{r}
+Iso_FT_per<-Iso%>%mutate(FT_per_PPP=FT.FREQ/PPP)%>%filter(POSS>4)
+Iso_FT_per%>%ggplot(aes(x=PLAYER,y=FT_per_PPP))+geom_bar(stat="identity") +theme(axis.text.x = element_text(angle = 90))
+```
+

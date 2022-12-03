@@ -1,0 +1,113 @@
+---
+title: "Rashaad Penny Article"
+author: "Nathan Mehta"
+date: "2/15/2022"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## load
+```{r}
+twenone_fantasy<-read.csv("Downloads/2021 fantasy - Sheet1.csv")
+```
+
+## clean
+```{r}
+head(twenone_fantasy)
+```
+```{r}
+twenone_fantasy
+```
+
+```{r}
+#twenone_fantasy<-twenone_fantasy[-c(51,52),]
+twenone_fantasy[nrow(twenone_fantasy)+1,]=list(50,"Jonathan Taylor","IND","RB",17,332,1811,5.5,18,51,40,360,2,4,2.1,19.6,333.1)
+tail(twenone_fantasy)
+```
+```{r}
+names(twenone_fantasy)<-c("num","name","team","pos",'GP','Att','yds','ypc','td','tgts','rec','recyds','rectd','fum','lst','Fpts/G','FantasyPoints')
+```
+
+```{r}
+library(tidyverse)
+```
+## mutate rushing fantasy data
+```{r}
+twenone_fantasy$FantasyPoints<-as.double(twenone_fantasy$FantasyPoints)
+twenone_fantasy<-twenone_fantasy%>%mutate(adj_fan_pts= FantasyPoints- ((recyds /10) + (rectd * 6)))
+```
+
+```{r}
+twenone_fantasy<-twenone_fantasy%>%arrange(desc(adj_fan_pts))%>%filter(Att>192)
+```
+
+## load eff data
+```{r}
+t_eff<-read.csv("Downloads/20eff - Sheet1.csv")
+
+t_eff<-t_eff%>%filter(PLAYER.NAME %in% twenone_fantasy$name)
+t_eff
+twenone_fantasy
+```
+## new df combining Efficiency data with Fantasy data
+```{r}
+twenone_fantasy<-twenone_fantasy%>%filter(name %in% t_eff$PLAYER.NAME)
+
+```
+```{r}
+combined
+```
+
+```{r}
+library(ggplot2)
+```
+
+```{r}
+combined<-combined%>%arrange(twenone_fantasy.name)%>%arrange(t_eff.PLAYER.NAME)
+```
+
+## scratch combined
+```{r}
+combined2<-data.frame(twenone_fantasy$name,twenone_fantasy$adj_fan_pts,t_eff$EFF)
+combined2
+```
+## write filtered data
+```{r}
+write.csv(twenone_fantasy,"twenone_fantasy.csv")
+write.csv(t_eff,"teff.csv")
+```
+## fix for combining
+
+```{r}
+twenone_fantasy<-twenone_fantasy%>%arrange(name)
+t_eff<-t_eff%>%arrange(PLAYER.NAME)
+```
+
+```{r}
+twenone_fantasy<-twenone_fantasy%>%add_column(eff=t_eff$EFF)
+```
+
+```{r}
+final<-twenone_fantasy%>%select(c("name","eff","adj_fan_pts"))
+```
+
+
+```{r}
+final
+```
+## plot of rushing fantasy points and rushing eff
+```{r}
+graphEff1<-final%>%ggplot(aes(x=eff,y=adj_fan_pts))+geom_point()+geom_text(size=3,aes(label=name), nudge_y = 7) + xlab("Rushing Efficiency") +ylab("Rushing Fantasy Points") +xlim(2.8,4)+geom_vline(xintercept = 2.87) + geom_text(aes(x=2.87, label="\nRashaad Penny Eff.", y=250), colour="blue", angle=90, size = 3)
+```
+
+```{r}
+graphEff1
+```
+## correlatioon
+```{r}
+cor(final$eff,final$adj_fan_pts)
+```
+

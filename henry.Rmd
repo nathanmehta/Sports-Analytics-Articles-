@@ -1,0 +1,106 @@
+---
+title: "Derrick Henry Hypothesis Testing"
+author: "Nathan Mehta"
+date: '2022-09-21'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Load CSV
+```{r}
+top_rush <- read.csv('Downloads/top_rush_seasons - Sheet1.csv')
+```
+
+```{r}
+library(tidyverse)
+```
+
+## view
+```{r}
+head(top_rush)
+```
+## column names
+```{r}
+names(top_rush)<-c('name', 'season yards', 'yds/g', 'yds/gf8 next', 'diff', 'GPFY')
+```
+
+## exploratory plots
+```{r}
+top_rush
+```
+```{r}
+top_rush$`yds/g`
+```
+
+```{r}
+ggplot(top_rush, aes(`yds/g`)) + geom_freqpoly(aes(color = name), binwidth = 1) + xlab("") +ylab("")
+```
+
+
+
+
+## Check for normality with histogram and QQ plot
+```{r}
+ggplot(top_rush, aes(abs(`diff`))) + geom_histogram(aes(y = ..density..), binwidth = 7, color = 'black') + geom_density(color = 'red',lwd = .5, linetype = 2) + xlab("YPG Drop off From Record Season to First Half of Next Season") +ylab("") + geom_text(aes(x= 6, label="Dickerson '86-'87", y=.01), colour="blue", size = 3) + geom_segment(aes(x=72,y=0,xend=72,yend=.009), color = 'orange') + geom_segment(aes(x=6,y=0,xend=6,yend=.009), color = 'blue') + geom_text(aes(x= 72, label="Davis '98-'99", y=.01), colour="orange", size = 3) + geom_text(aes(x= 58, label="Murray '14-'15", y=.017), colour="blue", size = 3) + geom_segment(aes(x=58,y=0,xend=58,yend=.016), color = 'blue') + geom_text(aes(x= 12, label="Sanders '94-'95", y=.015), colour="#00B0F6", size = 3, alpha = .5) + geom_segment(aes(x=12,y=0,xend=12,yend=.014), color = '#00B0F6') +ylab("density")
+```
+
+```{r}
+qqnorm(top_rush$diff)
+```
+
+## preliminary plots
+ypg in season and season after 
+```{r}
+henry_yds<-c(126.6, 117.1)
+ED_yds <- c(131.5, 80.5)
+AP_yds <- c(131.06, 88.8)
+JL_yds<-c(129.1, 81.3)
+BS_yds<-c(128.31,109)
+TD_yds<-c(125.5,52.75)
+CJ_yds<-c(125.37,90.12)
+OJ_yds<- c(143.07, 88.12)
+cats1<-c("2000 yd Season", "Season After")
+yards_df<-data.frame(henry_yds,cats1,ED_yds, AP_yds,JL_yds,BS_yds,TD_yds,CJ_yds,OJ_yds)
+yards_df%>%ggplot(aes(x=cats1))+geom_point(aes(y=henry_yds), color="blue") +xlab("Seasons") + ylab("YPG") + geom_segment(aes(x="2000 yd Season",y=126.6,xend="Season After",yend=117.1), color = "blue") + geom_text(aes(x= "2000 yd Season", label='Derrick Henry', y=125), colour="blue", size = 3, nudge_x = .9) + geom_point(aes(y=ED_yds), color="black") + geom_segment(aes(x="2000 yd Season",y=131.5,xend="Season After",yend=80.5), color = "black") + geom_text(aes(x= "2000 yd Season", label='Eric Dickerson', y=133), colour="black", size = 3) + geom_point(aes(y=AP_yds), color="purple") + geom_segment(aes(x="2000 yd Season",y=131.06,xend="Season After",yend=88.8), color = "purple") + geom_text(aes(x= "2000 yd Season", label='Adrian Peterson', y=130), colour="purple", size = 3) + geom_point(aes(y=JL_yds), color="gray") + geom_segment(aes(x="2000 yd Season",y=129.1,xend="Season After",yend=81.3), color = "gray") + geom_text(aes(x= "2000 yd Season", label='Jamal Lewis', y=127), colour="gray", size = 3, nudge_x = .25) + geom_point(aes(y=BS_yds), color="#00B0F6") + geom_segment(aes(x="2000 yd Season",y=128.31,xend="Season After",yend=109), color = "#00B0F6") + geom_text(aes(x= "2000 yd Season", label='Barry Sanders', y=108), colour="#00B0F6", size = 3, nudge_x = .9) + geom_point(aes(y=TD_yds), color="#CD9600") + geom_segment(aes(x="2000 yd Season",y=125.5,xend="Season After",yend=52.75), color = "#CD9600") + geom_text(aes(x= "2000 yd Season", label='Terrell Davis', y=80), colour="#CD9600", size = 3, nudge_x = .5) + geom_point(aes(y=CJ_yds), color="#00BFC4") + geom_segment(aes(x="2000 yd Season",y=125.37,xend="Season After",yend=90.12), color = "#00BFC4") + geom_text(aes(x= "2000 yd Season", label='CJ', y=91), colour="#00BFC4", size = 3, nudge_x = .9) + geom_point(aes(y=OJ_yds), color="#FF61CC") + geom_segment(aes(x="2000 yd Season",y=143.07,xend="Season After",yend=88.12), color = "#FF61CC") + geom_text(aes(x= "2000 yd Season", label='OJ', y=140), colour="#FF61CC", size = 3)
+```
+## Regression year after on year 
+
+```{r}
+ggplot(data = top_rush, aes(x = `yds/g`, y = `yds/gf8 next`)) +
+geom_point() +
+geom_smooth(method = 'lm')
+```
+## t-test
+Henry's ypg difference significantly different ???? 
+```{r}
+s <- (sd(top_rush$diff)*(18/19)) / sqrt(25)
+s
+```
+
+```{r}
+#define population mean and standard deviation
+population_mean <- 38.287
+population_sd <- 3.363*sqrt(25)
+
+#define upper and lower bound
+lower_bound <- population_mean - population_sd
+upper_bound <- population_mean + population_sd
+
+#Create a sequence of 1000 x values based on population mean and standard deviation
+x <- seq(-4, 4, length = 1000) * population_sd + population_mean
+
+#create a vector of values that shows the height of the probability distribution
+#for each value in x
+y <- dnorm(x, population_mean, population_sd)
+
+#plot normal distribution with customized x-axis labels
+plot(x,y, type = "l", lwd = 2, axes = FALSE, xlab = "", ylab = "")
+sd_axis_bounds = 5
+axis_bounds <- seq(-sd_axis_bounds * population_sd + population_mean,
+                    sd_axis_bounds * population_sd + population_mean,
+                    by = population_sd)
+axis(side = 1, at = axis_bounds, pos = 0)
+```
+

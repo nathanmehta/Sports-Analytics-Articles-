@@ -1,0 +1,101 @@
+---
+title: "burrow proj"
+author: "Nathan Mehta"
+date: "2/19/2022"
+output: html_document
+---
+Creating A new NFL Metric: High percentiles in stats in contrast to eachother ... read article for more 
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## load and omit
+```{r}
+all_qbs<-read.csv("Downloads/quantqbs1 - Sheet1.csv")
+```
+```{r}
+all_qbs<-na.omit(all_qbs)
+```
+```{r}
+all_qbs
+```
+## library
+
+```{r,echo=FALSE}
+library(tidyverse)
+```
+
+## quantiles for stats
+```{r}
+quantile(all_qbs$CAY,.5)
+quantile(all_qbs$AGG,.5)
+quantile(all_qbs$YDS,.5)
+quantile(all_qbs$COMP,.5)
+```
+```{r}
+quantile(all_qbs$TT,.25)
+```
+```{r}
+quantile(all_qbs$CAY,.11)
+```
+```{r}
+all_qbs%>%filter((PLAYER.NAME == 'Aaron Rodgers') & (year == 2021))
+```
+
+### 75th : CAY - 6.5, AGG- 19.1, YDS- 4054, Comp- 67
+### 65th : CAY- 6.3, AGG- 17.9, YDS- 3803.4, Comp- 65.84
+### 50th : CAY- 5.9, AGG- 16.6, YDS- 3271, Comp- 64.3
+## filter
+```{r}
+top_qbs<-all_qbs%>%filter(CAY>6.5 & AGG.>19.1 & YDS>4054 & COMP.>67)
+top_qbs
+top_qbs%>%select(c("PLAYER.NAME","AGG.","CAY","YDS","COMP."))
+```
+## 65th 
+```{r}
+sixfifth<-all_qbs%>%filter(CAY>6.3 & AGG.>17.9 & YDS>3803.4 & COMP.>65.84)
+sixfifth%>%select(c("PLAYER.NAME","AGG.","CAY","YDS","COMP."))
+sixfifth
+```
+```{r}
+sixfifth%>%select(c("PLAYER.NAME","AGG.","CAY","YDS","COMP."))
+```
+## 50th percentile
+```{r}
+fifty<-top_qbs<-all_qbs%>%filter(CAY>5.9 & AGG.>16.6 & YDS>3271 & COMP.>64.3)
+fifty
+```
+```{r}
+quantile(all_qbs$TT,.25)
+```
+```{r}
+all_qbs%>%filter(TT<2.62 & YDS>4054 & CAY>6.5)
+```
+## Explore Aggressiveness Column
+```{r}
+all_qbs%>%filter(year==2020)%>%arrange(desc(AGG.))%>%select(c("PLAYER.NAME","AGG.","COMP."))
+```
+```{r}
+all_qbs%>%filter(year==2018)%>%arrange(desc(AGG.))%>%select(c("PLAYER.NAME","AGG.","COMP."))
+```
+## Explore correlation between contrasting stats
+```{r}
+cor(all_qbs$AGG., all_qbs$COMP.)
+```
+
+```{r}
+cor(all_qbs$CAY, all_qbs$COMP.)
+```
+## Regression Agg on Comp
+```{r}
+ggplot(data = all_qbs, aes(x = AGG., y = COMP.)) +
+geom_point() +
+geom_smooth(method = 'lm') + geom_hline(yintercept = mean(all_qbs$COMP.), color = 'green') + geom_vline(xintercept = mean(all_qbs$AGG.), color = 'red')
+```
+## Regression CAY on Comp
+```{r}
+ggplot(data = all_qbs, aes(x = CAY, y = COMP.)) +
+geom_point() +
+geom_smooth(method = 'lm') + geom_hline(yintercept = mean(all_qbs$COMP.), color = 'green') + geom_vline(xintercept = mean(all_qbs$CAY), color = 'red')
+```
+

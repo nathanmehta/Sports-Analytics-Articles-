@@ -1,0 +1,110 @@
+---
+title: "cp3 article"
+author: "Nathan Mehta"
+date: "11/24/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+## Load data and packages
+```{r}
+library(tidyverse)
+```
+
+
+```{r}
+oseven_shooting<-read.csv("Downloads/08shooting - Sheet1-2.csv")
+```
+
+```{r}
+oseven_shooting
+```
+## 2007 PGs 2pt Freq and 2pt Freq Bar Plots
+```{r}
+oseven_pgs<-oseven_shooting%>%filter((PLAYER=="Chris Paul" | PLAYER=="Monta Ellis"| PLAYER=="Allen Iverson"|PLAYER=="Andre Miller"| PLAYER=="Jason Kidd"|PLAYER=="Raymond Felton"|PLAYER=="Mo Williams"|PLAYER=="Deron Williams"))
+```
+```{r}
+c4 = oseven_pgs$PLAYER=="Chris Paul"
+graph1<-oseven_pgs%>%ggplot(aes(x=PLAYER,y=X.FGA.3PT,fill=c4))+geom_bar(stat="identity") +theme(axis.text.x = element_text(angle = 90)) + xlab("2007-2008 Point Guards") +ylab("3-Point Shot Freq%")+geom_hline(yintercept = 18.4)
+graph1
+```
+
+```{r}
+c4 = oseven_pgs$PLAYER=="Chris Paul"
+graph1o<-oseven_pgs%>%ggplot(aes(x=PLAYER,y=X.FGA.2PT,fill=c4))+geom_bar(stat="identity") +theme(axis.text.x = element_text(angle = 90)) + xlab("2007-2008 Point Guards") +ylab("2-point shot frequency%")+geom_hline(yintercept = 70.5)
+graph1o
+mean(oseven_shooting$X.FGA.2PT)
+mean(oseven_pgs$X.FGA.2PT)
+```
+## 2014 PGs 2pt Freq and 2pt Freq Bar Plots
+```{r}
+fourteen_shooting<-read.csv("Downloads/14-15 shooting - Sheet1.csv")
+```
+```{r}
+fourt_pgs<-fourteen_shooting%>%filter((PLAYER=="Chris Paul" | PLAYER=="Ty Lawson"| PLAYER=="John Wall"|PLAYER=="Damian Lillard"| PLAYER=="Kemba Walker"|PLAYER=="Kyle Lowry"|PLAYER=="Russell Westbrook"|PLAYER=="Stephen Curry"))
+```
+
+```{r}
+color = fourt_pgs$PLAYER=="Chris Paul"
+graph2<-fourt_pgs%>%ggplot(aes(x=PLAYER,y=X.FGA.2PT,fill=color))+geom_bar(stat="identity") +theme(axis.text.x = element_text(angle = 90)) + xlab("2014-2015 Point Guards") +ylab("2-Point Shot Freq%")
+graph2
+```
+
+```{r}
+color = fourt_pgs$PLAYER=="Chris Paul"
+graph3<-fourt_pgs%>%ggplot(aes(x=PLAYER,y=X.PTS.3PT,fill=color))+geom_bar(stat="identity") +theme(axis.text.x = element_text(angle = 90)) + xlab("2014-2015 Point Guards") +ylab("3-Point Shot Freq%")
+graph3
+```
+
+```{r}
+twen_shooting<-read.csv("Downloads/20-21 shooting.2 - Sheet1.csv")
+```
+
+## 2020 2pt Freq and 2pt Freq Bar Plots
+```{r}
+twen_pgs<-twen_shooting%>%filter((PLAYER=="Chris Paul" | PLAYER=="James Harden"| PLAYER=="Russell Westbrook"|PLAYER=="Damian Lillard"| PLAYER=="Jamal Murray"|PLAYER=="Trae Young"|PLAYER=="Luka Doncic"|PLAYER=="Stephen Curry"))
+```
+
+```{r}
+color = twen_pgs$PLAYER=="Chris Paul"
+graph20<-twen_pgs%>%ggplot(aes(x=PLAYER,y=X.FGA.2PT,fill=color))+geom_bar(stat="identity") +theme(axis.text.x = element_text(angle = 90)) + xlab("2020-2021 Point Guards") +ylab("2-Point Shot Freq%") +geom_hline(yintercept = 59.4)
+graph20
+
+```
+
+```{r}
+color = twen_pgs$PLAYER=="Chris Paul"
+graph201<-twen_pgs%>%ggplot(aes(x=PLAYER,y=X.FGA.3PT,fill=color))+geom_bar(stat="identity") +theme(axis.text.x = element_text(angle = 90)) + xlab("2020-2021 Point Guards") +ylab("3-Point Shot Freq%")+geom_hline(yintercept = 40)
+graph201
+```
+
+```{r}
+mean(c(43.1,40.4,43.1,39.5,39.0,34.1,41.0,39.8))
+```
+
+```{r}
+ast_tov<-read.csv("Downloads/assist_tov - Sheet1.csv")
+```
+
+```{r}
+head(ast_tov)
+```
+
+```{r}
+library(tidyverse)
+```
+## Assist to Turnover Ratio mutation and plot for top PGs
+```{r}
+ast_tov%>%mutate('ast/to'=ast_tov$APG/ast_tov$TPG)
+```
+
+```{r}
+ast_tov<-ast_tov%>%filter((NAME=="Chris Paul" | NAME=="John Stockton"| NAME=="LeBron James"|NAME=="Magic Johnson"| NAME=="Mark Jackson"|NAME=="Jason Kidd"|NAME=="Gary Payton"|NAME=="Steve Nash"|NAME=='Andre Miller'|NAME=='Isiah Thomas'))
+color = ast_tov$NAME=="Chris Paul"
+ast_tov$NAME <- factor(ast_tov$NAME,levels = c("John Stockton", "Jason Kidd", "Chris Paul", "Steve Nash","Mark Jackson","Magic Johnson","LeBron James","Gary Payton","Isiah Thomas","Andre Miller"))
+graphAT<-ast_tov%>%ggplot(aes(x=NAME,y=APG/TPG,fill=color))+geom_bar(stat="identity") +theme(axis.text.x = element_text(angle = 90)) + xlab("Top 10 Assisters") +ylab("Assist/Turnover Ratio")
+graphAT
+```
+

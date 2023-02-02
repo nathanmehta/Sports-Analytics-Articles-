@@ -4,7 +4,7 @@ author: "Nathan Mehta"
 date: "10/7/2021"
 output: html_document
 ---
-- Analyzing effect of new foul rules on James Harden
+# Analyzing effect of new foul rules on James Harden
 ## Load data
 ```{r setup, include=FALSE}
 knitr::opts_chunk$set(echo = TRUE)

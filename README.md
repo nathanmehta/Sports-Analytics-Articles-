@@ -2,10 +2,10 @@
 
 My code for my articles for Sports Analytics Group at Berkeley
 
-## Harden Project
+## noMoreFoulPlay
   article on the effect of the changing foul rules on certain players - article titled "No More Foul Play"
   
-## cp3 project
+## OldDogoldtricks
   article on the 3-point revolution and how one player has curtailed it - article titled "Old Dog, Old Tricks"
   
 ## Burrow project

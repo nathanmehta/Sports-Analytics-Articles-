@@ -2,6 +2,10 @@
 
 My code for my articles for Sports Analytics Group at Berkeley
 
+## NFLOLmodelselection
+
+  Feature engineering and Regression model selection using cross validation error and regularization to find the best predictors of Offensive Line play in the NFL
+
 ## noMoreFoulPlay
   article on the effect of the changing foul rules on certain players - article titled "No More Foul Play"
   
@@ -11,8 +15,8 @@ My code for my articles for Sports Analytics Group at Berkeley
 ## Nflmvp
   article on my new metric for MVP taking into account inversely related stats - article titled "NFL MVP: What it should be"
   
-## Henry project
-  Hypothesis testing to determine whether Derek Henry would've had another 2000 yard season in 2021 - article titled TBD
+## rbHypotest
+  Hypothesis testing to determine whether Derrick Henry would've had another 2000 yard season in 2021 - article titled TBD
   
-## Rashaad Penny Project
-  Investigating the relationship between advanced stats and fantasy points - article Titled "Unlucky Penny"
+## UnluckyPenny
+  Investigating the relationship between advanced running back tracking stats and fantasy points - article Titled "Unlucky Penny"

@@ -8,7 +8,7 @@ My code for my articles for Sports Analytics Group at Berkeley
 ## OldDogoldtricks
   article on the 3-point revolution and how one player has curtailed it - article titled "Old Dog, Old Tricks"
   
-## Burrow project
+## Nflmvp
   article on my new metric for MVP taking into account inversely related stats - article titled "NFL MVP: What it should be"
   
 ## Henry project

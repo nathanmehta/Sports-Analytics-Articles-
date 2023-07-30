@@ -1,6 +1,6 @@
 # Sports-Analytics-Articles-
 
-My code for my articles for Sports Analytics Group at Berkeley
+My code for my articles for Sports Analytics Group at Berkeley and personal projects
 
 ## NFLOLmodelselection
 

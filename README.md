@@ -3,8 +3,13 @@
 my code for my articles for Sports Analytics Group at Berkeley and personal projects
 
 ## NFLOLmodelselection
-
   feature engineering and Regression model selection using cross validation error and regularization to find the best predictors of Offensive Line play in the NFL
+
+## Clustering Article
+  Using clustering models to identify the stylistic differences in WNBA and NBA players
+
+## OTcontact
+   Using neural network setup to predict injuries
 
 ## noMoreFoulPlay
   article on the effect of the changing foul rules on certain players - article titled "No More Foul Play"
